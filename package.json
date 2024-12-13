@@ -1,5 +1,5 @@
 {
-  "name": "@nestjs/mqtt",
+  "name": "nestjs-mqtt",
   "version": "1.0.0",
   "description": "A MQTT module for Nest.js",
   "author": "magdsnail",
