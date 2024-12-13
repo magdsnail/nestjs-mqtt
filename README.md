@@ -1,2 +1,2 @@
-# -nestjs-mqtt
+# nestjs-mqtt
 nestjs/mqtt
