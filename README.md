@@ -6,7 +6,7 @@ A MQTT module for Nest.js. Compatible with emqtt.
 
 ## Installation
 
-> ⚠️ After version 0.2.0, `nest-mqtt` make a breaking change. User should add additional `mqtt` package manual.
+> ⚠️ After version 0.2.0, `nestjs-mqtt` make a breaking change. User should add additional `mqtt` package manual.
 
 ```bash
 $ npm install @nestjs/mqtt mqtt --save
@@ -16,14 +16,14 @@ $ npm install @nestjs/mqtt mqtt --save
 
 ### Import
 
-Nest-mqtt will register as a global module.
+nestjs-mqtt will register as a global module.
 
 You can import with configuration
 
 ```typescript
 // app.module.ts
 import { Module } from '@nestjs/common';
-import { MqttModule } from 'nest-mqtt';
+import { MqttModule } from 'nestjs-mqtt';
 
 @Module({
   imports: [MqttModule.forRoot(options)]
@@ -36,7 +36,7 @@ or use async import method
 ```typescript
 // app.module.ts
 import { Module } from '@nestjs/common';
-import { MqttModule } from 'nest-mqtt';
+import { MqttModule } from 'nestjs-mqtt';
 
 @Module({
   imports: [MqttModule.forRootAsync({
@@ -53,7 +53,7 @@ You can define any subscriber or consumer in any provider. For example,
 
 ```typescript
 import { Injectable } from '@nestjs/common';
-import { Subscribe, Payload, Topic } from 'nest-mqtt';
+import { Subscribe, Payload, Topic } from 'nestjs-mqtt';
 
 @Injectable()
 export class TestService {
@@ -76,7 +76,7 @@ Also, you can inject parameter with decorator:
 
 ```typescript
 import { Injectable } from '@nestjs/common';
-import { Subscribe, Payload } from 'nest-mqtt';
+import { Subscribe, Payload } from 'nestjs-mqtt';
 
 @Injectable()
 export class TestService {
@@ -109,11 +109,11 @@ When subscribe the topic "test/+/test/+" and incoming topic is "test/1/test/2", 
 
 ### Publish
 
-Nest-mqtt wrap some functions with `Promise` and provide a provider.
+nestjs-mqtt wrap some functions with `Promise` and provide a provider.
 
 ```typescript
 import { Inject, Injectable } from '@nestjs/common';
-import { MqttService } from 'nest-mqtt';
+import { MqttService } from 'nestjs-mqtt';
 
 @Injectable()
 export class TestService {
@@ -132,7 +132,7 @@ export class TestService {
 
 ## Emqtt Compatible
 
-nest-mqtt support emq shared subscription
+nestjs-mqtt support emq shared subscription
 
 - Global mode
 
@@ -141,7 +141,7 @@ Module options support queue and share property for globally converting all topi
 ```typescript
 // app.module.ts
 import { Module } from '@nestjs/common';
-import { MqttModule } from 'nest-mqtt';
+import { MqttModule } from 'nestjs-mqtt';
 
 @Module({
   imports: [MqttModule.forRoot({
@@ -157,7 +157,7 @@ export class AppModule {}
 
 ```typescript
 import { Injectable } from '@nestjs/common';
-import { Subscribe, Payload, Topic } from 'nest-mqtt';
+import { Subscribe, Payload, Topic } from 'nestjs-mqtt';
 
 @Injectable()
 export class TestService {
@@ -180,7 +180,7 @@ The priority of subscribe is higher than the global mode. If you want to specify
 
 ## Support
 
-Nest-mqtt is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+nestjs-mqtt is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
 ## Stay in touch
 
@@ -188,4 +188,4 @@ Nest-mqtt is an MIT-licensed open source project. It can grow thanks to the spon
 
 ## License
 
-nest-mqtt is [MIT licensed](LICENSE).
+nestjs-mqtt is [MIT licensed](LICENSE).

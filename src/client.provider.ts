@@ -25,7 +25,7 @@ export function createClientProvider(): Provider {
         logger.log('MQTT reconnecting');
       });
 
-      client.on('close', error => {
+      client.on('close', () => {
         logger.log('MQTT closed');
       });
 
