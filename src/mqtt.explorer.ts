@@ -6,7 +6,7 @@ import {
   MQTT_SUBSCRIBE_OPTIONS,
   MQTT_SUBSCRIBER_PARAMS,
 } from './mqtt.constants';
-import { Client } from 'mqtt';
+import type { MqttClient } from 'mqtt';
 import { Packet } from 'mqtt-packet';
 import { getTransform } from './mqtt.transform';
 import {
@@ -25,7 +25,7 @@ export class MqttExplorer implements OnModuleInit {
     private readonly discoveryService: DiscoveryService,
     private readonly metadataScanner: MetadataScanner,
     @Inject(MQTT_LOGGER_PROVIDER) private readonly logger: Logger,
-    @Inject(MQTT_CLIENT_INSTANCE) private readonly client: Client,
+    @Inject(MQTT_CLIENT_INSTANCE) private readonly client: MqttClient,
     @Inject(MQTT_OPTION_PROVIDER) private readonly options: MqttModuleOptions,
   ) {
     this.subscribers = [];
