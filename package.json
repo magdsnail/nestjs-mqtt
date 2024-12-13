@@ -1,6 +1,6 @@
 {
   "name": "@nestjs/mqtt",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "A MQTT module for Nest.js",
   "author": "magdsnail",
   "license": "MIT",
