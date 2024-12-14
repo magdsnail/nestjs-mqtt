@@ -92,23 +92,38 @@ export class MqttExplorer implements OnModuleInit {
       if (!instance) {
         return;
       }
-      this.metadataScanner.scanFromPrototype(
-        instance,
-        Object.getPrototypeOf(instance),
-        key => {
-          const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
-            MQTT_SUBSCRIBE_OPTIONS,
-            instance[key],
-          );
-          const parameters = this.reflector.get(
-            MQTT_SUBSCRIBER_PARAMS,
-            instance[key],
-          );
-          if (subscribeOptions) {
-            this.subscribe(subscribeOptions, parameters, instance[key], instance);
-          }
-        },
-      );
+      // scan from instance
+      this.metadataScanner.getAllMethodNames(instance).forEach(key => {
+        const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
+          MQTT_SUBSCRIBE_OPTIONS,
+          instance[key],
+        );
+        const parameters = this.reflector.get(
+          MQTT_SUBSCRIBER_PARAMS,
+          instance[key],
+        );
+        if (subscribeOptions) {
+          this.subscribe(subscribeOptions, parameters, instance[key], instance);
+        }
+      });
+
+      // this.metadataScanner.scanFromPrototype(
+      //   instance,
+      //   Object.getPrototypeOf(instance),
+      //   key => {
+      //     const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
+      //       MQTT_SUBSCRIBE_OPTIONS,
+      //       instance[key],
+      //     );
+      //     const parameters = this.reflector.get(
+      //       MQTT_SUBSCRIBER_PARAMS,
+      //       instance[key],
+      //     );
+      //     if (subscribeOptions) {
+      //       this.subscribe(subscribeOptions, parameters, instance[key], instance);
+      //     }
+      //   },
+      // );
     });
     this.client.on(
       'message',
