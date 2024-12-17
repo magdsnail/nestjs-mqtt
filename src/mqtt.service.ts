@@ -8,6 +8,10 @@ export class MqttService {
     @Inject(MQTT_CLIENT_INSTANCE) private readonly client: MqttClient,
   ) {}
 
+  get getClient() { 
+    return this.client;
+  }
+  
   subscribe(topic: string | string[], opts?: IClientSubscribeOptions): Promise<ISubscriptionGrant[]> {
     return new Promise((resolve, reject) => {
       this.client.subscribe(topic, opts || null, (err, granted) => {

@@ -93,7 +93,7 @@ export class MqttExplorer implements OnModuleInit {
         return;
       }
       // scan from instance
-      this.metadataScanner.getAllMethodNames(instance).forEach(key => {
+      this.metadataScanner.getAllMethodNames(Object.getPrototypeOf(instance)).forEach(key => {
         const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
           MQTT_SUBSCRIBE_OPTIONS,
           instance[key],
