@@ -1,28 +1,48 @@
 import { Provider, Logger } from '@nestjs/common';
-import { connect } from 'mqtt';
+import { connect, MqttClient } from 'mqtt';
 import { MqttModuleOptions } from './mqtt.interface';
 import { MQTT_CLIENT_INSTANCE, MQTT_OPTION_PROVIDER, MQTT_LOGGER_PROVIDER } from './mqtt.constants';
+import { readFileSync } from 'fs';
+
+let client: MqttClient;
+
+function loadConfig(options: MqttModuleOptions) {
+  client.options = {
+    ...client.options,
+    ...options,
+    ...(options.load ? JSON.parse(readFileSync(options.load, 'utf-8')) : {}),
+  };
+}
+
+function retryConnect(options: MqttModuleOptions) {
+  if (!options.load) {
+    return;
+  }
+  loadConfig(options);
+}
 
 export function createClientProvider(): Provider {
   return {
     provide: MQTT_CLIENT_INSTANCE,
     useFactory: (options: MqttModuleOptions, logger: Logger) => {
-      const client = connect(options);
+      client = connect(options);
 
-      client.on('connect', () => {
+      client.on('connect', (topics) => {
         logger.log('MQTT connected');
-        // console.log(packet);
+        // client.subscribe(topics);
       });
 
       client.on('disconnect', packet => {
         logger.log('MQTT disconnected');
       });
 
-      client.on('error', error => {
+      client.on('error', (error: any) => {
+        console.log(error);
       });
 
-      client.on('reconnect', () => {
+      client.on('reconnect', async () => {
         logger.log('MQTT reconnecting');
+        if (!client.connected) retryConnect(options);
       });
 
       client.on('close', () => {

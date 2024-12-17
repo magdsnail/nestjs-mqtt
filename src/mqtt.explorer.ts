@@ -1,8 +1,9 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
+import { EventEmitter } from 'events';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import {
-  MQTT_CLIENT_INSTANCE, MQTT_LOGGER_PROVIDER, MQTT_OPTION_PROVIDER,
+  MQTT_CLIENT_INSTANCE, MQTT_CONNECT_CLIENT, MQTT_LOGGER_PROVIDER, MQTT_OPTION_PROVIDER,
   MQTT_SUBSCRIBE_OPTIONS,
   MQTT_SUBSCRIBER_PARAMS,
 } from './mqtt.constants';
@@ -98,6 +99,7 @@ export class MqttExplorer implements OnModuleInit {
           MQTT_SUBSCRIBE_OPTIONS,
           instance[key],
         );
+
         const parameters = this.reflector.get(
           MQTT_SUBSCRIBER_PARAMS,
           instance[key],
@@ -107,23 +109,25 @@ export class MqttExplorer implements OnModuleInit {
         }
       });
 
-      // this.metadataScanner.scanFromPrototype(
-      //   instance,
-      //   Object.getPrototypeOf(instance),
-      //   key => {
-      //     const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
-      //       MQTT_SUBSCRIBE_OPTIONS,
-      //       instance[key],
-      //     );
-      //     const parameters = this.reflector.get(
-      //       MQTT_SUBSCRIBER_PARAMS,
-      //       instance[key],
-      //     );
-      //     if (subscribeOptions) {
-      //       this.subscribe(subscribeOptions, parameters, instance[key], instance);
-      //     }
-      //   },
-      // );
+
+      //   this.metadataScanner.scanFromPrototype(
+      //     instance,
+      //     Object.getPrototypeOf(instance),
+      //     key => {
+      //       const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
+      //         MQTT_SUBSCRIBE_OPTIONS,
+      //         instance[key],
+      //       );
+      //       const parameters = this.reflector.get(
+      //         MQTT_SUBSCRIBER_PARAMS,
+      //         instance[key],
+      //       );
+      //       if (subscribeOptions) {
+      //         this.subscribe(subscribeOptions, parameters, instance[key], instance);
+      //       }
+      //     },
+      //   );
+
     });
     this.client.on(
       'message',

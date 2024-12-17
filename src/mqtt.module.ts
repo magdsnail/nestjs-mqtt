@@ -15,6 +15,7 @@ import {
 import {
   MQTT_OPTION_PROVIDER,
 } from './mqtt.constants';
+import { readFileSync } from 'fs';
 
 @Global()
 @Module({
@@ -22,7 +23,6 @@ import {
   exports: [MqttService],
 })
 export class MqttModule {
-
   public static forRootAsync(options: MqttModuleAsyncOptions): DynamicModule {
     return {
       module: MqttModule,
