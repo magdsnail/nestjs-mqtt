@@ -9,7 +9,7 @@ export type LoggerConstructor = new (...params) => LoggerService;
 export interface MqttSubscribeOptions {
   topic: string | string[];
   queue?: boolean;
-  share?: string;
+  share?: string | boolean;
   transform?: 'json' | 'text' | MqttMessageTransformer;
 }
 
