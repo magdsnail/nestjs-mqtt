@@ -27,9 +27,8 @@ export function createClientProvider(): Provider {
     useFactory: (options: MqttModuleOptions, logger: Logger) => {
       client = connect(options);
 
-      client.on('connect', (topics) => {
+      client.on('connect', () => {
         logger.log('MQTT connected');
-        // client.subscribe(topics);
       });
 
       client.on('disconnect', packet => {

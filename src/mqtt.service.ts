@@ -6,7 +6,7 @@ import { MqttClient, Packet, IClientPublishOptions, IClientSubscribeOptions, ISu
 export class MqttService {
   constructor(
     @Inject(MQTT_CLIENT_INSTANCE) private readonly client: MqttClient,
-  ) {}
+  ) { }
 
   get getClient() { 
     return this.client;

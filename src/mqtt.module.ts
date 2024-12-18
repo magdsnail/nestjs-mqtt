@@ -15,7 +15,6 @@ import {
 import {
   MQTT_OPTION_PROVIDER,
 } from './mqtt.constants';
-import { readFileSync } from 'fs';
 
 @Global()
 @Module({
