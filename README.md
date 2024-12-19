@@ -29,15 +29,18 @@ import { Module } from '@nestjs/common';
 import { MqttModule } from 'nestjs-mqtt';
 
 @Module({
-  imports: [MqttModule.forRoot({
-    url: 'mqtt://localhost:1883',
-    options: {
-      load: 'filename'
-    }
-  })]
+  imports: [
+    MqttModule.forRoot({
+      url: 'mqtt://localhost:1883',
+      options: {
+        load: 'filename',
+      },
+    }),
+  ],
 })
 export class AppModule {}
 ```
+
 > 新增 topic 动态传参
 
 ```typescript
@@ -65,15 +68,15 @@ import { Subscribe, Payload, Topic } from 'nestjs-mqtt';
 export class TestService {
   @Subscribe('{{hello}}/test')
   test() {
-  
+
   }
-  
+
   @Subscribe({
     topic: '{{hello}}/test2',
     transform: payload => payload.toString(),
   })
   test2() {
-    
+
   }
 }
 ```
@@ -84,7 +87,7 @@ import { Module } from '@nestjs/common';
 import { MqttModule } from 'nestjs-mqtt';
 
 @Module({
-  imports: [MqttModule.forRoot(options)]
+  imports: [MqttModule.forRoot(options)],
 })
 export class AppModule {}
 ```
@@ -97,13 +100,14 @@ import { Module } from '@nestjs/common';
 import { MqttModule } from 'nestjs-mqtt';
 
 @Module({
-  imports: [MqttModule.forRootAsync({
-    useFactory: () => options,
-  })]
+  imports: [
+    MqttModule.forRootAsync({
+      useFactory: () => options,
+    }),
+  ],
 })
 export class AppModule {}
 ```
-
 
 ### Subscribe
 
@@ -116,17 +120,13 @@ import { Subscribe, Payload, Topic } from 'nestjs-mqtt';
 @Injectable()
 export class TestService {
   @Subscribe('test')
-  test() {
-  
-  }
-  
+  test() {}
+
   @Subscribe({
     topic: 'test2',
-    transform: payload => payload.toString(),
+    transform: (payload) => payload.toString(),
   })
-  test2() {
-    
-  }
+  test2() {}
 }
 ```
 
@@ -163,7 +163,7 @@ Get the raw packet of incoming message.
 
 Get the wildcard part of topic. It will return an array of string which extract from topic. For example:
 
-When subscribe the topic "test/+/test/+" and incoming topic is "test/1/test/2", you will get the array `["1", "2"]`. 
+When subscribe the topic "test/+/test/+" and incoming topic is "test/1/test/2", you will get the array `["1", "2"]`.
 
 ### Publish
 
@@ -175,16 +175,13 @@ import { MqttService } from 'nestjs-mqtt';
 
 @Injectable()
 export class TestService {
-  constructor(
-    @Inject(MqttService) private readonly mqttService: MqttService,
-  ) {}
+  constructor(@Inject(MqttService) private readonly mqttService: MqttService) {}
 
   async testPublish() {
     this.mqttService.publish('topic', {
-      foo: 'bar'
+      foo: 'bar',
     });
   }
-
 }
 ```
 
@@ -202,11 +199,13 @@ import { Module } from '@nestjs/common';
 import { MqttModule } from 'nestjs-mqtt';
 
 @Module({
-  imports: [MqttModule.forRoot({
-    host: '127.0.0.1',
-    queue: true,
-    share: 'group1'
-  })]
+  imports: [
+    MqttModule.forRoot({
+      host: '127.0.0.1',
+      queue: true,
+      share: 'group1',
+    }),
+  ],
 })
 export class AppModule {}
 ```
@@ -220,29 +219,21 @@ import { Subscribe, Payload, Topic } from 'nestjs-mqtt';
 @Injectable()
 export class TestService {
   @Subscribe('test')
-  test() {
-  
-  }
-  
+  test() {}
+
   @Subscribe({
     topic: 'test2',
     queue: true,
   })
-  test2() {
-    
-  }
+  test2() {}
 }
 ```
 
-The priority of subscribe is higher than the global mode. If you want to specify a topic do not use the shared mode, set it as false in subscribe decorator. 
+The priority of subscribe is higher than the global mode. If you want to specify a topic do not use the shared mode, set it as false in subscribe decorator.
 
 ## Support
 
 nestjs-mqtt is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [microud](https://xknow.net)
 
 ## License
 
