@@ -55,7 +55,9 @@ export interface MqttModuleOptions extends IClientOptions {
 
   beforeHandle?: (topic: string, payload: Buffer, packet: Packet) => any;
 
-  load?: string;// 动态加载文件配置
+  load?: string; // 动态加载文件配置
+
+  variables?: Record<string, string>; //topic 动态变量替换
 }
 
 export interface MqttOptionsFactory {

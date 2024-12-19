@@ -38,6 +38,45 @@ import { MqttModule } from 'nestjs-mqtt';
 })
 export class AppModule {}
 ```
+> 新增 topic 动态传参
+
+```typescript
+// app.module.ts
+import { Module } from '@nestjs/common';
+import { MqttModule } from 'nestjs-mqtt';
+
+@Module({
+  imports: [MqttModule.forRoot({
+    url: 'mqtt://localhost:1883',
+    options: {
+      ...,
+      variables: {
+        hello: 'test'
+      }
+    }
+  })]
+})
+export class AppModule {}
+
+import { Injectable } from '@nestjs/common';
+import { Subscribe, Payload, Topic } from 'nestjs-mqtt';
+
+@Injectable()
+export class TestService {
+  @Subscribe('{{hello}}/test')
+  test() {
+  
+  }
+  
+  @Subscribe({
+    topic: '{{hello}}/test2',
+    transform: payload => payload.toString(),
+  })
+  test2() {
+    
+  }
+}
+```
 
 ```typescript
 // app.module.ts

@@ -126,7 +126,8 @@ export class MqttExplorer {
           instance[key],
         );
         if (subscribeOptions) {
-          this.subscribe(subscribeOptions, parameters, instance[key], instance);
+          const replaceOptions = this.replacePlaceholders(subscribeOptions, this.options.variables);
+          this.subscribe(replaceOptions, parameters, instance[key], instance);
         }
       });
       // this.metadataScanner.scanFromPrototype(
@@ -199,6 +200,18 @@ export class MqttExplorer {
     return null;
   }
 
+  private replacePlaceholders(template: MqttSubscribeOptions, variables: Record<string, string>) {
+    let result = template;
+    for (const key in variables) {
+      const placeholder = '{{' + key + '}}';
+      result.topic = (Array.isArray(result.topic) ? result.topic : [result.topic]).map(topic => (topic.replace(placeholder, variables[key])));
+    }
+    // let result = template.replace(/{{(\w+)}}/g, function (match, p1) {
+    //   return variables[p1];
+    // });
+    return result;
+  }
+  
   private static topicToRegexp(topic: string) {
     // compatible with emqtt
     return new RegExp(
