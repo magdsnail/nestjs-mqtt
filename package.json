@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
-    "url": "https://github.com/magdsnail/nestjs-mqtt"
+    "url": "git+https://github.com/magdsnail/nestjs-mqtt.git"
   },
   "keywords": [
     "nest-mqtt",
