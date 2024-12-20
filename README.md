@@ -21,27 +21,7 @@ nestjs-mqtt will register as a global module.
 
 You can import with configuration
 
-> version 1.2.0 新增 动态加载配置文件建立连接，配置文件为json，文件内容为mqtt连接配置
-
-```typescript
-// app.module.ts
-import { Module } from '@nestjs/common';
-import { MqttModule } from 'nestjs-mqtt';
-
-@Module({
-  imports: [
-    MqttModule.forRoot({
-      url: 'mqtt://localhost:1883',
-      options: {
-        load: 'filename',
-      },
-    }),
-  ],
-})
-export class AppModule {}
-```
-
-> version 1.3.0 新增 topic 动态传参 
+> version 1.3.0 新增 topic 动态传参
 
 ```typescript
 // app.module.ts
@@ -79,6 +59,26 @@ export class TestService {
 
   }
 }
+```
+
+> version 1.2.0 新增 动态加载配置文件建立连接，配置文件为json，文件内容为mqtt连接配置
+
+```typescript
+// app.module.ts
+import { Module } from '@nestjs/common';
+import { MqttModule } from 'nestjs-mqtt';
+
+@Module({
+  imports: [
+    MqttModule.forRoot({
+      url: 'mqtt://localhost:1883',
+      options: {
+        load: 'filename',
+      },
+    }),
+  ],
+})
+export class AppModule {}
 ```
 
 ```typescript
