@@ -169,7 +169,8 @@ export class MqttExplorer {
               this.options.beforeHandle(topic, payload, packet);
             }
 
-            subscriber.handle.bind(subscriber.provider)(
+            const boundHandle = (...args) => subscriber.handle.apply(subscriber.provider, args);
+            boundHandle(
               ...scatterParameters.map(parameter => {
                 switch (parameter?.type) {
                   case 'payload':
@@ -185,6 +186,22 @@ export class MqttExplorer {
                 }
               }),
             );
+            // subscriber.handle.bind(subscriber.provider)(
+            //   ...scatterParameters.map(parameter => {
+            //     switch (parameter?.type) {
+            //       case 'payload':
+            //         return transform(payload);
+            //       case 'topic':
+            //         return topic;
+            //       case 'packet':
+            //         return packet;
+            //       case 'params':
+            //         return MqttExplorer.matchGroups(topic, subscriber.regexp);
+            //       default:
+            //         return null;
+            //     }
+            //   }),
+            // );
           } catch (err) {
             this.logger.error(err);
           }
