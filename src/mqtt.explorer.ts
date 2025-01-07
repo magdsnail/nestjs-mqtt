@@ -127,9 +127,9 @@ export class MqttExplorer {
         );
         if (subscribeOptions) {
           let replaceOptions = subscribeOptions;
-          if(this.options.variables) {
-            replaceOptions = this.replacePlaceholders(subscribeOptions, this.options.variables);
-          }
+          // if(this.options.variables) {
+          //   replaceOptions = this.replacePlaceholders(subscribeOptions, this.options.variables);
+          // }
           this.subscribe(replaceOptions, parameters, instance[key], instance);
         }
       });
