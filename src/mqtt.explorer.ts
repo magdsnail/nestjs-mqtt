@@ -34,10 +34,10 @@ export class MqttExplorer {
     this.onConnect();
   }
 
-  // onApplicationBootstrap() {
-  //   this.logger.log('MqttModule dependencies initialized');
-  //   this.explore();
-  // }
+  onApplicationBootstrap() {
+    this.logger.log('MqttModule dependencies initialized');
+    this.explore();
+  }
 
   onConnect() {
     this.client.on('connect', () => {
@@ -116,40 +116,40 @@ export class MqttExplorer {
         return;
       }
       // scan from instance
-      // this.metadataScanner.getAllMethodNames(Object.getPrototypeOf(instance)).forEach(key => {
-      //   const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
-      //     MQTT_SUBSCRIBE_OPTIONS,
-      //     instance[key],
-      //   );
-      //   const parameters = this.reflector.get(
-      //     MQTT_SUBSCRIBER_PARAMS,
-      //     instance[key],
-      //   );
-      //   if (subscribeOptions) {
-      //     let replaceOptions = subscribeOptions;
-      //     // if(this.options.variables) {
-      //     //   replaceOptions = this.replacePlaceholders(subscribeOptions, this.options.variables);
-      //     // }
-      //     this.subscribe(replaceOptions, parameters, instance[key], instance);
-      //   }
-      // });
-      this.metadataScanner.scanFromPrototype(
-        instance,
-        Object.getPrototypeOf(instance),
-        key => {
-          const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
-            MQTT_SUBSCRIBE_OPTIONS,
-            instance[key],
-          );
-          const parameters = this.reflector.get(
-            MQTT_SUBSCRIBER_PARAMS,
-            instance[key],
-          );
-          if (subscribeOptions) {
-            this.subscribe(subscribeOptions, parameters, instance[key], instance);
+      this.metadataScanner.getAllMethodNames(Object.getPrototypeOf(instance)).forEach(key => {
+        const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
+          MQTT_SUBSCRIBE_OPTIONS,
+          instance[key],
+        );
+        const parameters = this.reflector.get(
+          MQTT_SUBSCRIBER_PARAMS,
+          instance[key],
+        );
+        if (subscribeOptions) {
+          let replaceOptions = subscribeOptions;
+          if(this.options.variables) {
+            replaceOptions = this.replacePlaceholders(subscribeOptions, this.options.variables);
           }
-        },
-      );
+          this.subscribe(replaceOptions, parameters, instance[key], instance);
+        }
+      });
+      // this.metadataScanner.scanFromPrototype(
+      //   instance,
+      //   Object.getPrototypeOf(instance),
+      //   key => {
+      //     const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
+      //       MQTT_SUBSCRIBE_OPTIONS,
+      //       instance[key],
+      //     );
+      //     const parameters = this.reflector.get(
+      //       MQTT_SUBSCRIBER_PARAMS,
+      //       instance[key],
+      //     );
+      //     if (subscribeOptions) {
+      //       this.subscribe(subscribeOptions, parameters, instance[key], instance);
+      //     }
+      //   },
+      // );
     });
     this.client.on(
       'message',
