@@ -19,6 +19,7 @@ function retryConnect(options: MqttModuleOptions) {
     return;
   }
   loadConfig(options);
+  // client.connect();
 }
 
 export function createClientProvider(): Provider {
@@ -41,7 +42,7 @@ export function createClientProvider(): Provider {
 
       client.on('reconnect', async () => {
         logger.log('MQTT reconnecting');
-        if (!client.connected) retryConnect(options);
+        retryConnect(options);
       });
 
       client.on('close', () => {

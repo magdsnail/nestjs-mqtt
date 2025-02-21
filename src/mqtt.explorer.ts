@@ -34,13 +34,20 @@ export class MqttExplorer {
     this.onConnect();
   }
 
-  onApplicationBootstrap() {
-    this.logger.log('MqttModule dependencies initialized');
-    this.explore();
-  }
+  // 1
+  // onModuleInit() {
+  //   this.logger.log('MqttModule dependencies initialized');
+  //   this.explore();
+  // }
+
+  // 2
+  // onApplicationBootstrap() {
+  //   this.logger.log('MqttModule dependencies initialized');
+  //   this.explore();
+  // }
 
   onConnect() {
-    this.client.on('connect', () => {
+    this.client.on('connect', async () => {
       this.explore();
     })
   }
@@ -70,51 +77,85 @@ export class MqttExplorer {
     }
   }
 
-  subscribe(options: MqttSubscribeOptions, parameters: MqttSubscriberParameter[], handle, provider) {
-    this.client.subscribe(this.preprocess(options), err => {
-      if (!err) {
-        // put it into this.subscribers;
-        (Array.isArray(options.topic) ? options.topic : [options.topic])
-          .forEach(topic => {
-            if (!this.subscribers.has(topic)) {
+  async subscribe(options: MqttSubscribeOptions, parameters: MqttSubscriberParameter[], handle, provider) {
+    try {
+      const topics = Array.isArray(options.topic) ? options.topic : [options.topic];
+      const processedTopics = topics.map(topic => this.preprocess({ ...options, topic }));
+
+      processedTopics.forEach(topic => {
+        // @ts-ignore
+        if (!this.subscribers.has(topic)) {
+          this.client.subscribe(topic, err => {
+            if (!err) {
+              // @ts-ignore
               this.subscribers.set(topic, {
                 topic,
+                // @ts-ignore
                 route: topic.replace('$queue/', '')
                   .replace(/^\$share\/([A-Za-z0-9]+)\//, ''),
+                // @ts-ignore
                 regexp: MqttExplorer.topicToRegexp(topic),
                 provider,
                 handle,
                 options,
                 parameters,
               });
+              this.logger.debug(`subscribe topic [${topic}] success`);
+            } else {
+              this.logger.error(`subscribe topic [${topic}] failed`)
             }
-            // this.subscribers.push({
-            //   topic,
-            //   route: topic.replace('$queue/', '')
-            //     .replace(/^\$share\/([A-Za-z0-9]+)\//, ''),
-            //   regexp: MqttExplorer.topicToRegexp(topic),
-            //   provider,
-            //   handle,
-            //   options,
-            //   parameters,
-            // });
-          });
-        this.logger.debug(`subscribe topic [${options.topic}] success`);
-      } else {
-        this.logger.error(
-          `subscribe topic [${options.topic} failed]`,
-        );
-      }
-    });
+          })
+        }
+      });
+
+      // this.client.subscribe(this.preprocess(options), err => {
+      //   if (!err) {
+      //     // put it into this.subscribers;
+      //     (Array.isArray(options.topic) ? options.topic : [options.topic])
+      //       .forEach(topic => {
+      //         if (!this.subscribers.has(topic)) {
+      //           this.subscribers.set(topic, {
+      //             topic,
+      //             route: topic.replace('$queue/', '')
+      //               .replace(/^\$share\/([A-Za-z0-9]+)\//, ''),
+      //             regexp: MqttExplorer.topicToRegexp(topic),
+      //             provider,
+      //             handle,
+      //             options,
+      //             parameters,
+      //           });
+      //         }
+      //         // this.subscribers.push({
+      //         //   topic,
+      //         //   route: topic.replace('$queue/', '')
+      //         //     .replace(/^\$share\/([A-Za-z0-9]+)\//, ''),
+      //         //   regexp: MqttExplorer.topicToRegexp(topic),
+      //         //   provider,
+      //         //   handle,
+      //         //   options,
+      //         //   parameters,
+      //         // });
+      //       });
+      //     this.logger.debug(`subscribe topic [${options.topic}] success`);
+      //   } else {
+      //     this.logger.error(
+      //       `subscribe topic [${options.topic} failed]`,
+      //     );
+      //   }
+      // });
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   explore() {
     const providers = this.discoveryService.getProviders();
-    providers.forEach((wrapper: InstanceWrapper) => {
+    providers.forEach(async (wrapper: InstanceWrapper) => {
       const { instance } = wrapper;
       if (!instance) {
         return;
       }
+
       // scan from instance
       this.metadataScanner.getAllMethodNames(Object.getPrototypeOf(instance)).forEach(key => {
         const subscribeOptions: MqttSubscribeOptions = this.reflector.get(
@@ -127,7 +168,7 @@ export class MqttExplorer {
         );
         if (subscribeOptions) {
           let replaceOptions = subscribeOptions;
-          if(this.options.variables) {
+          if (this.options.variables) {
             replaceOptions = this.replacePlaceholders(subscribeOptions, this.options.variables);
           }
           this.subscribe(replaceOptions, parameters, instance[key], instance);
@@ -213,7 +254,7 @@ export class MqttExplorer {
     // });
     return result;
   }
-  
+
   private static topicToRegexp(topic: string) {
     // compatible with emqtt
     return new RegExp(
