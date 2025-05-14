@@ -9,6 +9,8 @@ A MQTT module for Nest.js. Compatible with emqtt.
 > ⚠️ After version 0.2.0, `nestjs-mqtt` make a breaking change. User should add additional `mqtt` package manual.
 > @nestjs/core and @nestjs/common version >= 11.0.1 is required.
 
+> ⚠️ 支持 @nestjs/core @nestjs/common 11.0.1
+
 ```bash
 $ npm install nestjs-mqtt mqtt --save
 ```
