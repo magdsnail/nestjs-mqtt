@@ -7,7 +7,7 @@ A MQTT module for Nest.js. Compatible with emqtt.
 ## Installation
 
 > ⚠️ After version 0.2.0, `nestjs-mqtt` make a breaking change. User should add additional `mqtt` package manual.
-> @nestjs/core and @nestjs/common version >= 10.0.0 is required.
+> @nestjs/core and @nestjs/common version >= 11.0.1 is required.
 
 ```bash
 $ npm install nestjs-mqtt mqtt --save
@@ -30,13 +30,10 @@ import { MqttModule } from 'nestjs-mqtt';
 
 @Module({
   imports: [MqttModule.forRoot({
-    url: 'mqtt://localhost:1883',
-    options: {
       ...,
       variables: {
         hello: 'test'
       }
-    }
   })]
 })
 export class AppModule {}
@@ -71,10 +68,7 @@ import { MqttModule } from 'nestjs-mqtt';
 @Module({
   imports: [
     MqttModule.forRoot({
-      url: 'mqtt://localhost:1883',
-      options: {
-        load: 'filename',
-      },
+      load: 'filename',
     }),
   ],
 })
