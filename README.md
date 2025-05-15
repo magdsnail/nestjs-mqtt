@@ -1,4 +1,5 @@
 # NestJS-MQTT
+### 支持nestjs 10 版本
 
 ## Description
 
