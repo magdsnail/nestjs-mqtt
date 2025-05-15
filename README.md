@@ -1,5 +1,7 @@
 # NestJS-MQTT
 
+### 支持nestjs 11 版本
+
 ## Description
 
 A MQTT module for Nest.js. Compatible with emqtt.
